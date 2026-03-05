@@ -20,8 +20,9 @@
                 <span>طفلي معي</span>
             </div>
             <nav>
-                <a href="#" class="active" id="nav-milestones"><i class="fas fa-tasks"></i> المعالم النمائية</a>
-                <a href="#" id="nav-vaccinations"><i class="fas fa-syringe"></i> التلقيحات</a>
+                <a href="#" class="active" id="nav-milestones"><i class="fas fa-step-forward"></i> المعالم النمائية</a>
+                <a href="#" id="nav-vaccinations"><i class="fas fa-syringe"></i> اللقاحات</a>
+                <a href="#" id="nav-articles"><i class="fas fa-book-open"></i> المقالات والنصائح</a>
                 <a href="#"><i class="fas fa-users"></i> إحصائيات</a>
                 <a href="#"><i class="fas fa-cog"></i> الإعدادات</a>
             </nav>
@@ -97,6 +98,29 @@
 
                 <div class="milestones-grid" id="vaccinations-list">
                     <!-- Vaccinations will be loaded here -->
+                    <div class="loader">جارِ التحميل...</div>
+                </div>
+            </section>
+
+            <!-- Articles Section -->
+            <section id="articles-section" style="display: none;">
+                <header>
+                    <div class="header-info">
+                        <h1>إدارة المقالات والنصائح</h1>
+                        <p>أضف مقالات ونصائح مفيدة للأهالي بناءً على عمر الطفل</p>
+                    </div>
+                    <button id="add-article-btn" class="btn-primary">
+                        <i class="fas fa-plus"></i> إضافة مقال جديد
+                    </button>
+                </header>
+                <section class="filters">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="article-search" placeholder="بحث عن مقال...">
+                    </div>
+                </section>
+                <div class="milestones-grid" id="articles-list">
+                    <!-- Articles will be loaded here -->
                     <div class="loader">جارِ التحميل...</div>
                 </div>
             </section>

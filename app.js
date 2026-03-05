@@ -31,13 +31,22 @@ const addVaccinationBtn = document.getElementById('add-vaccination-btn');
 const closeVaccinationBtn = document.getElementById('close-vaccination-modal');
 const vaccinationForm = document.getElementById('vaccination-form');
 
+const articlesSection = document.getElementById('articles-section');
+const articlesList = document.getElementById('articles-list');
+const articleModal = document.getElementById('article-modal');
+const addArticleBtn = document.getElementById('add-article-btn');
+const closeArticleBtn = document.getElementById('close-article-modal');
+const articleForm = document.getElementById('article-form');
+
 const searchInput = document.getElementById('search-input');
 const categoryFilter = document.getElementById('category-filter');
 const ageFilter = document.getElementById('age-filter');
 const vaccinationSearch = document.getElementById('vaccination-search');
+const articleSearch = document.getElementById('article-search');
 
 let allMilestones = [];
 let allVaccinations = [];
+let allArticles = [];
 
 // Navigation Logic
 navMilestones.onclick = (e) => {
@@ -50,19 +59,20 @@ navVaccinations.onclick = (e) => {
     showSection('vaccinations');
 };
 
+const navArticles = document.getElementById('nav-articles');
+navArticles.onclick = (e) => {
+    e.preventDefault();
+    showSection('articles');
+};
+
 function showSection(section) {
-    if (section === 'milestones') {
-        milestonesSection.style.display = 'block';
-        vaccinationsSection.style.display = 'none';
-        navMilestones.classList.add('active');
-        navVaccinations.classList.remove('active');
-    } else {
-        milestonesSection.style.display = 'none';
-        vaccinationsSection.style.display = 'block';
-        navMilestones.classList.remove('active');
-        navVaccinations.classList.add('active');
-        loadVaccinations();
-    }
+    milestonesSection.style.display = section === 'milestones' ? 'block' : 'none';
+    vaccinationsSection.style.display = section === 'vaccinations' ? 'block' : 'none';
+    articlesSection.style.display = section === 'articles' ? 'block' : 'none';
+
+    navMilestones.classList.toggle('active', section === 'milestones');
+    navVaccinations.classList.toggle('active', section === 'vaccinations');
+    navArticles.classList.toggle('active', section === 'articles');
 }
 
 // Load Milestones
@@ -76,11 +86,93 @@ function loadMilestones() {
 
 // Load Vaccinations
 function loadVaccinations() {
-    db.ref('vaccinations').on('value', (snapshot) => {
-        const data = snapshot.val();
-        allVaccinations = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+    firebase.database().ref('vaccinations').on('value', (snapshot) => {
+        allVaccinations = [];
+        snapshot.forEach((childSnapshot) => {
+            allVaccinations.push({
+                id: childSnapshot.key,
+                ...childSnapshot.val()
+            });
+        });
         renderVaccinations();
     });
+}
+
+// Load Articles
+function loadArticles() {
+    firebase.database().ref('articles').on('value', (snapshot) => {
+        allArticles = [];
+        snapshot.forEach((childSnapshot) => {
+            allArticles.push({
+                id: childSnapshot.key,
+                ...childSnapshot.val()
+            });
+        });
+        renderArticles();
+    });
+}
+
+// Render Articles
+function renderArticles() {
+    const searchTerm = articleSearch.value.toLowerCase();
+
+    const filtered = allArticles.filter(art => {
+        const matchesSearch = art.title.toLowerCase().includes(searchTerm) ||
+            art.preview.toLowerCase().includes(searchTerm);
+        return matchesSearch;
+    });
+
+    articlesList.innerHTML = '';
+
+    if (filtered.length === 0) {
+        articlesList.innerHTML = '<div class="loader">لا توجد مقالات تطابق البحث</div>';
+        return;
+    }
+
+    filtered.forEach(art => {
+        const card = document.createElement('div');
+        card.className = 'milestone-card';
+        card.innerHTML = `
+            <span class="category-tag">${art.category}</span>
+            <h3>${art.title}</h3>
+            <p>${art.preview}</p>
+            <div class="age-range">
+                <i class="fas fa-calendar-alt"></i>
+                <span>${art.monthStart} - ${art.monthEnd} شهر</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-icon btn-edit" onclick="editArticle('${art.id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete" onclick="deleteArticle('${art.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        articlesList.appendChild(card);
+    });
+}
+
+function editArticle(id) {
+    const art = allArticles.find(a => a.id === id);
+    if (!art) return;
+
+    document.getElementById('article-id').value = art.id;
+    document.getElementById('article-title').value = art.title;
+    document.getElementById('article-category').value = art.category;
+    document.getElementById('article-monthStart').value = art.monthStart;
+    document.getElementById('article-monthEnd').value = art.monthEnd;
+    document.getElementById('article-preview').value = art.preview;
+    document.getElementById('article-content').value = art.content;
+
+    document.getElementById('article-modal-title').innerText = 'تعديل مقال';
+    articleModal.style.display = 'block';
+}
+
+function deleteArticle(id) {
+    if (confirm('هل أنت متأكد من حذف هذا المقال؟')) {
+        firebase.database().ref('articles/' + id).remove();
+    }
 }
 
 // Render Milestones
@@ -203,6 +295,26 @@ window.deleteVaccination = (id) => {
     }
 };
 
+window.editArticle = (id) => {
+    const art = allArticles.find(item => item.id === id);
+    if (!art) return;
+    document.getElementById('article-id').value = art.id;
+    document.getElementById('article-title').value = art.title;
+    document.getElementById('article-category').value = art.category;
+    document.getElementById('article-monthStart').value = art.monthStart;
+    document.getElementById('article-monthEnd').value = art.monthEnd;
+    document.getElementById('article-preview').value = art.preview;
+    document.getElementById('article-content').value = art.content;
+    document.getElementById('article-modal-title').innerText = 'تعديل المقال';
+    articleModal.style.display = 'block';
+};
+
+window.deleteArticle = (id) => {
+    if (confirm('هل أنت متأكد من حذف هذا المقال؟')) {
+        db.ref(`articles/${id}`).remove();
+    }
+};
+
 // Event Listeners
 addMilestoneBtn.onclick = () => {
     milestoneForm.reset();
@@ -224,7 +336,17 @@ closeVaccinationBtn.onclick = () => vaccinationModal.style.display = 'none';
 window.onclick = (event) => {
     if (event.target == milestoneModal) milestoneModal.style.display = 'none';
     if (event.target == vaccinationModal) vaccinationModal.style.display = 'none';
+    if (event.target == articleModal) articleModal.style.display = 'none';
 };
+
+addArticleBtn.onclick = () => {
+    articleForm.reset();
+    document.getElementById('article-id').value = '';
+    document.getElementById('article-modal-title').innerText = 'إضافة مقال جديد';
+    articleModal.style.display = 'block';
+};
+
+closeArticleBtn.onclick = () => articleModal.style.display = 'none';
 
 milestoneForm.onsubmit = (e) => {
     e.preventDefault();
@@ -252,6 +374,21 @@ vaccinationForm.onsubmit = (e) => {
     vaccinationModal.style.display = 'none';
 };
 
+articleForm.onsubmit = (e) => {
+    e.preventDefault();
+    const id = document.getElementById('article-id').value;
+    const data = {
+        title: document.getElementById('article-title').value,
+        category: document.getElementById('article-category').value,
+        monthStart: parseInt(document.getElementById('article-monthStart').value),
+        monthEnd: parseInt(document.getElementById('article-monthEnd').value),
+        preview: document.getElementById('article-preview').value,
+        content: document.getElementById('article-content').value
+    };
+    id ? db.ref(`articles/${id}`).update(data) : db.ref('articles').push(data);
+    articleModal.style.display = 'none';
+};
+
 searchInput.oninput = renderMilestones;
 categoryFilter.onchange = renderMilestones;
 ageFilter.onchange = renderMilestones;
@@ -260,3 +397,4 @@ vaccinationSearch.oninput = renderVaccinations;
 // Start app
 loadMilestones();
 loadVaccinations();
+loadArticles();
