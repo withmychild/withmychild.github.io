@@ -49,30 +49,36 @@ let allVaccinations = [];
 let allArticles = [];
 
 // Navigation Logic
-navMilestones.onclick = (e) => {
-    e.preventDefault();
-    showSection('milestones');
-};
+if (navMilestones) {
+    navMilestones.onclick = (e) => {
+        e.preventDefault();
+        showSection('milestones');
+    };
+}
 
-navVaccinations.onclick = (e) => {
-    e.preventDefault();
-    showSection('vaccinations');
-};
+if (navVaccinations) {
+    navVaccinations.onclick = (e) => {
+        e.preventDefault();
+        showSection('vaccinations');
+    };
+}
 
 const navArticles = document.getElementById('nav-articles');
-navArticles.onclick = (e) => {
-    e.preventDefault();
-    showSection('articles');
-};
+if (navArticles) {
+    navArticles.onclick = (e) => {
+        e.preventDefault();
+        showSection('articles');
+    };
+}
 
 function showSection(section) {
-    milestonesSection.style.display = section === 'milestones' ? 'block' : 'none';
-    vaccinationsSection.style.display = section === 'vaccinations' ? 'block' : 'none';
-    articlesSection.style.display = section === 'articles' ? 'block' : 'none';
+    if (milestonesSection) milestonesSection.style.display = section === 'milestones' ? 'block' : 'none';
+    if (vaccinationsSection) vaccinationsSection.style.display = section === 'vaccinations' ? 'block' : 'none';
+    if (articlesSection) articlesSection.style.display = section === 'articles' ? 'block' : 'none';
 
-    navMilestones.classList.toggle('active', section === 'milestones');
-    navVaccinations.classList.toggle('active', section === 'vaccinations');
-    navArticles.classList.toggle('active', section === 'articles');
+    if (navMilestones) navMilestones.classList.toggle('active', section === 'milestones');
+    if (navVaccinations) navVaccinations.classList.toggle('active', section === 'vaccinations');
+    if (navArticles) navArticles.classList.toggle('active', section === 'articles');
 }
 
 // Load Milestones
@@ -316,27 +322,35 @@ window.deleteArticle = (id) => {
 };
 
 // Event Listeners
-addMilestoneBtn.onclick = () => {
-    milestoneForm.reset();
-    document.getElementById('milestone-id').value = '';
-    document.getElementById('modal-title').innerText = 'إضافة معلم جديد';
-    milestoneModal.style.display = 'block';
-};
+if (addMilestoneBtn) {
+    addMilestoneBtn.onclick = () => {
+        if (milestoneForm) milestoneForm.reset();
+        const idField = document.getElementById('milestone-id');
+        const titleField = document.getElementById('modal-title');
+        if (idField) idField.value = '';
+        if (titleField) titleField.innerText = 'إضافة معلم جديد';
+        if (milestoneModal) milestoneModal.style.display = 'block';
+    };
+}
 
-addVaccinationBtn.onclick = () => {
-    vaccinationForm.reset();
-    document.getElementById('vaccination-id').value = '';
-    document.getElementById('vaccination-modal-title').innerText = 'إضافة لقاح جديد';
-    vaccinationModal.style.display = 'block';
-};
+if (addVaccinationBtn) {
+    addVaccinationBtn.onclick = () => {
+        if (vaccinationForm) vaccinationForm.reset();
+        const idField = document.getElementById('vaccination-id');
+        const titleField = document.getElementById('vaccination-modal-title');
+        if (idField) idField.value = '';
+        if (titleField) titleField.innerText = 'إضافة لقاح جديد';
+        if (vaccinationModal) vaccinationModal.style.display = 'block';
+    };
+}
 
-closeMilestoneBtn.onclick = () => milestoneModal.style.display = 'none';
-closeVaccinationBtn.onclick = () => vaccinationModal.style.display = 'none';
+if (closeMilestoneBtn) closeMilestoneBtn.onclick = () => { if (milestoneModal) milestoneModal.style.display = 'none'; };
+if (closeVaccinationBtn) closeVaccinationBtn.onclick = () => { if (vaccinationModal) vaccinationModal.style.display = 'none'; };
 
 window.onclick = (event) => {
-    if (event.target == milestoneModal) milestoneModal.style.display = 'none';
-    if (event.target == vaccinationModal) vaccinationModal.style.display = 'none';
-    if (event.target == articleModal) articleModal.style.display = 'none';
+    if (milestoneModal && event.target == milestoneModal) milestoneModal.style.display = 'none';
+    if (vaccinationModal && event.target == vaccinationModal) vaccinationModal.style.display = 'none';
+    if (articleModal && event.target == articleModal) articleModal.style.display = 'none';
 };
 
 if (articleSearch) articleSearch.oninput = renderArticles;
@@ -358,51 +372,57 @@ if (closeArticleBtn) {
     };
 }
 
-milestoneForm.onsubmit = (e) => {
-    e.preventDefault();
-    const id = document.getElementById('milestone-id').value;
-    const data = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        monthStart: parseInt(document.getElementById('monthStart').value),
-        monthEnd: parseInt(document.getElementById('monthEnd').value),
-        category: document.getElementById('category').value
+if (milestoneForm) {
+    milestoneForm.onsubmit = (e) => {
+        e.preventDefault();
+        const id = document.getElementById('milestone-id').value;
+        const data = {
+            title: document.getElementById('title').value,
+            description: document.getElementById('description').value,
+            monthStart: parseInt(document.getElementById('monthStart').value),
+            monthEnd: parseInt(document.getElementById('monthEnd').value),
+            category: document.getElementById('category').value
+        };
+        id ? db.ref(`milestones/${id}`).update(data) : db.ref('milestones').push(data);
+        if (milestoneModal) milestoneModal.style.display = 'none';
     };
-    id ? db.ref(`milestones/${id}`).update(data) : db.ref('milestones').push(data);
-    milestoneModal.style.display = 'none';
-};
+}
 
-vaccinationForm.onsubmit = (e) => {
-    e.preventDefault();
-    const id = document.getElementById('vaccination-id').value;
-    const data = {
-        title: document.getElementById('v-title').value,
-        description: document.getElementById('v-description').value,
-        dueMonth: parseInt(document.getElementById('v-dueMonth').value)
+if (vaccinationForm) {
+    vaccinationForm.onsubmit = (e) => {
+        e.preventDefault();
+        const id = document.getElementById('vaccination-id').value;
+        const data = {
+            title: document.getElementById('v-title').value,
+            description: document.getElementById('v-description').value,
+            dueMonth: parseInt(document.getElementById('v-dueMonth').value)
+        };
+        id ? db.ref(`vaccinations/${id}`).update(data) : db.ref('vaccinations').push(data);
+        if (vaccinationModal) vaccinationModal.style.display = 'none';
     };
-    id ? db.ref(`vaccinations/${id}`).update(data) : db.ref('vaccinations').push(data);
-    vaccinationModal.style.display = 'none';
-};
+}
 
-articleForm.onsubmit = (e) => {
-    e.preventDefault();
-    const id = document.getElementById('article-id').value;
-    const data = {
-        title: document.getElementById('article-title').value,
-        category: document.getElementById('article-category').value,
-        monthStart: parseInt(document.getElementById('article-monthStart').value),
-        monthEnd: parseInt(document.getElementById('article-monthEnd').value),
-        preview: document.getElementById('article-preview').value,
-        content: document.getElementById('article-content').value
+if (articleForm) {
+    articleForm.onsubmit = (e) => {
+        e.preventDefault();
+        const id = document.getElementById('article-id').value;
+        const data = {
+            title: document.getElementById('article-title').value,
+            category: document.getElementById('article-category').value,
+            monthStart: parseInt(document.getElementById('article-monthStart').value),
+            monthEnd: parseInt(document.getElementById('article-monthEnd').value),
+            preview: document.getElementById('article-preview').value,
+            content: document.getElementById('article-content').value
+        };
+        id ? db.ref(`articles/${id}`).update(data) : db.ref('articles').push(data);
+        if (articleModal) articleModal.style.display = 'none';
     };
-    id ? db.ref(`articles/${id}`).update(data) : db.ref('articles').push(data);
-    articleModal.style.display = 'none';
-};
+}
 
-searchInput.oninput = renderMilestones;
-categoryFilter.onchange = renderMilestones;
-ageFilter.onchange = renderMilestones;
-vaccinationSearch.oninput = renderVaccinations;
+if (searchInput) searchInput.oninput = renderMilestones;
+if (categoryFilter) categoryFilter.onchange = renderMilestones;
+if (ageFilter) ageFilter.onchange = renderMilestones;
+if (vaccinationSearch) vaccinationSearch.oninput = renderVaccinations;
 if (articleSearch) articleSearch.oninput = renderArticles;
 
 // Start app
