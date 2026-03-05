@@ -528,15 +528,64 @@ font-size:14px;
 
 }
 
-input,textarea,select{
+/* Inputs */
+
+input,
+textarea,
+select {
 
 width:100%;
 
-padding:12px;
+padding:14px 16px;
 
-border:1px solid var(--border);
+border:1px solid #d1d5db;
 
-border-radius:8px;
+border-radius:10px;
+
+background:#ffffff;
+
+font-family:'Almarai', sans-serif;
+
+font-size:14px;
+
+transition:all .25s;
+
+box-shadow:0 2px 4px rgba(0,0,0,0.03);
+
+}
+
+/* Focus effect */
+
+input:focus,
+textarea:focus,
+select:focus {
+
+outline:none;
+
+border-color:var(--primary);
+
+box-shadow:0 0 0 3px rgba(0,128,128,0.15);
+
+}
+
+/* Placeholder */
+
+input::placeholder,
+textarea::placeholder{
+
+color:#9ca3af;
+
+font-size:13px;
+
+}
+
+/* Textarea */
+
+textarea{
+
+height:110px;
+
+resize:vertical;
 
 }
 
@@ -573,3 +622,4 @@ color:var(--text-muted);
 font-weight:600;
 
 }
+
