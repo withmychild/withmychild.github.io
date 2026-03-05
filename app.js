@@ -86,7 +86,7 @@ function loadMilestones() {
 
 // Load Vaccinations
 function loadVaccinations() {
-    firebase.database().ref('vaccinations').on('value', (snapshot) => {
+    db.ref('vaccinations').on('value', (snapshot) => {
         allVaccinations = [];
         snapshot.forEach((childSnapshot) => {
             allVaccinations.push({
@@ -100,7 +100,7 @@ function loadVaccinations() {
 
 // Load Articles
 function loadArticles() {
-    firebase.database().ref('articles').on('value', (snapshot) => {
+    db.ref('articles').on('value', (snapshot) => {
         allArticles = [];
         snapshot.forEach((childSnapshot) => {
             allArticles.push({
@@ -171,7 +171,7 @@ function editArticle(id) {
 
 function deleteArticle(id) {
     if (confirm('هل أنت متأكد من حذف هذا المقال؟')) {
-        firebase.database().ref('articles/' + id).remove();
+        db.ref('articles/' + id).remove();
     }
 }
 
@@ -339,16 +339,24 @@ window.onclick = (event) => {
     if (event.target == articleModal) articleModal.style.display = 'none';
 };
 
+if (articleSearch) articleSearch.oninput = renderArticles;
+
 if (addArticleBtn) {
     addArticleBtn.onclick = () => {
-        articleForm.reset();
-        document.getElementById('article-id').value = '';
-        document.getElementById('article-modal-title').innerText = 'إضافة مقال جديد';
-        articleModal.style.display = 'block';
+        if (articleForm) articleForm.reset();
+        const idField = document.getElementById('article-id');
+        const titleField = document.getElementById('article-modal-title');
+        if (idField) idField.value = '';
+        if (titleField) titleField.value = 'إضافة مقال جديد';
+        if (articleModal) articleModal.style.display = 'block';
     };
 }
 
-closeArticleBtn.onclick = () => articleModal.style.display = 'none';
+if (closeArticleBtn) {
+    closeArticleBtn.onclick = () => {
+        if (articleModal) articleModal.style.display = 'none';
+    };
+}
 
 milestoneForm.onsubmit = (e) => {
     e.preventDefault();

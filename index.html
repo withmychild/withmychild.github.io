@@ -198,6 +198,48 @@
         </div>
     </div>
 
+    <!-- Article Modal -->
+    <div id="article-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="article-modal-title">إضافة مقال جديد</h2>
+                <span class="close" id="close-article-modal">&times;</span>
+            </div>
+            <form id="article-form">
+                <input type="hidden" id="article-id">
+                <div class="form-group">
+                    <label for="article-title">العنوان</label>
+                    <input type="text" id="article-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="article-category">التصنيف</label>
+                    <input type="text" id="article-category" placeholder="تغذية، نوم، صحة..." required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="article-monthStart">بداية العمر (شهر)</label>
+                        <input type="number" id="article-monthStart" min="0" max="36" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-monthEnd">نهاية العمر (شهر)</label>
+                        <input type="number" id="article-monthEnd" min="0" max="36" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="article-preview">نبذة قصيرة</label>
+                    <textarea id="article-preview" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="article-content">المحتوى الكامل</label>
+                    <textarea id="article-content" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-primary">حفظ المقال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
