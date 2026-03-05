@@ -344,3 +344,7 @@ textarea {
     color: var(--text-muted);
     font-weight: 600;
 }
+* {
+    font-family: 'Almarai', sans-serif;
+}
+
