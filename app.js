@@ -339,12 +339,14 @@ window.onclick = (event) => {
     if (event.target == articleModal) articleModal.style.display = 'none';
 };
 
-addArticleBtn.onclick = () => {
-    articleForm.reset();
-    document.getElementById('article-id').value = '';
-    document.getElementById('article-modal-title').innerText = 'إضافة مقال جديد';
-    articleModal.style.display = 'block';
-};
+if (addArticleBtn) {
+    addArticleBtn.onclick = () => {
+        articleForm.reset();
+        document.getElementById('article-id').value = '';
+        document.getElementById('article-modal-title').innerText = 'إضافة مقال جديد';
+        articleModal.style.display = 'block';
+    };
+}
 
 closeArticleBtn.onclick = () => articleModal.style.display = 'none';
 
@@ -393,6 +395,7 @@ searchInput.oninput = renderMilestones;
 categoryFilter.onchange = renderMilestones;
 ageFilter.onchange = renderMilestones;
 vaccinationSearch.oninput = renderVaccinations;
+if (articleSearch) articleSearch.oninput = renderArticles;
 
 // Start app
 loadMilestones();
