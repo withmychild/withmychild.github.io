@@ -23,6 +23,8 @@ body {
     background-color: var(--bg-main);
     color: var(--text-main);
     overflow: hidden;
+    font-family: 'Almarai', 'Tahoma', sans-serif;
+    line-height: 1.8;
 }
 
 .app-container {
@@ -344,7 +346,5 @@ textarea {
     color: var(--text-muted);
     font-weight: 600;
 }
-* {
-    font-family: 'Almarai', sans-serif;
-}
+
 
