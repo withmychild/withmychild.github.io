@@ -1,254 +1,47 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الأخصائيين - طفلي معي</title>
-     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
-     
-     <link rel="stylesheet" href="style.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم الأخصائيين - طفلي معي</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-child"></i>
-                <span>طفلي معي</span>
-            </div>
-            <nav>
-                <a href="#" class="active" id="nav-milestones"><i class="fas fa-step-forward"></i> المعالم النمائية</a>
-                <a href="#" id="nav-vaccinations"><i class="fas fa-syringe"></i> اللقاحات</a>
-                <a href="#" id="nav-articles"><i class="fas fa-book-open"></i> المقالات والنصائح</a>
-                
-                
-            </nav>
-            <div class="sidebar-footer">
-                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
-            </div>
-        </aside>
 
-        <main class="main-content">
-            <!-- Milestones Section -->
-            <section id="milestones-section">
-                <header>
-                    <div class="header-info">
-                        <h1>إدارة المعالم النمائية</h1>
-                        <p>أضف وحدث معالم النمو للأطفال من الولادة حتى 3 سنوات</p>
-                    </div>
-                    <button id="add-milestone-btn" class="btn-primary">
-                        <i class="fas fa-plus"></i> إضافة معلم جديد
-                    </button>
-                </header>
+<div class="app-container">
 
-                <section class="filters">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="search-input" placeholder="بحث عن معلم...">
-                    </div>
-                    <div class="filter-group">
-                        <select id="category-filter">
-                            <option value="all">كل التصنيفات</option>
-                            <option value="MOTOR">حركي</option>
-                            <option value="LANGUAGE">لغوي</option>
-                            <option value="COGNITIVE">معرفي</option>
-                            <option value="SOCIAL">اجتماعي</option>
-                        </select>
-                        <select id="age-filter">
-                            <option value="all">كل الأعمار</option>
-                            <option value="2">2 شهر</option>
-                            <option value="4">4 أشهر</option>
-                            <option value="6">6 أشهر</option>
-                            <option value="9">9 أشهر</option>
-                            <option value="12">12 شهر</option>
-                            <option value="18">18 شهر</option>
-                            <option value="24">24 شهر</option>
-                            <option value="36">36 شهر</option>
-                        </select>
-                    </div>
-                </section>
+<aside class="sidebar">
+<div class="logo">
+<i class="fas fa-child"></i>
+<span>طفلي معي</span>
+</div>
 
-                <div class="milestones-grid" id="milestones-list">
-                    <!-- Milestones will be loaded here -->
-                    <div class="loader">جارِ التحميل...</div>
-                </div>
-            </section>
+<nav>
+<a href="#" class="active">المعالم النمائية</a>
+</nav>
 
-            <!-- Vaccinations Section -->
-            <section id="vaccinations-section" style="display: none;">
-                <header>
-                    <div class="header-info">
-                        <h1>إدارة التلقيحات</h1>
-                        <p>أضف وحدث جدول التلقيحات للأطفال</p>
-                    </div>
-                    <button id="add-vaccination-btn" class="btn-primary">
-                        <i class="fas fa-plus"></i> إضافة لقاح جديد
-                    </button>
-                </header>
+<div class="sidebar-footer">
+<button id="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+</div>
+</aside>
 
-                <section class="filters">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="vaccination-search" placeholder="بحث عن لقاح...">
-                    </div>
-                </section>
+<main class="main-content">
+<h1>لوحة التحكم</h1>
+<p>يمكنك إدارة البيانات بعد تسجيل الدخول</p>
+</main>
 
-                <div class="milestones-grid" id="vaccinations-list">
-                    <!-- Vaccinations will be loaded here -->
-                    <div class="loader">جارِ التحميل...</div>
-                </div>
-            </section>
+</div>
 
-            <!-- Articles Section -->
-            <section id="articles-section" style="display: none;">
-                <header>
-                    <div class="header-info">
-                        <h1>إدارة المقالات والنصائح</h1>
-                        <p>أضف مقالات ونصائح مفيدة للأهالي بناءً على عمر الطفل</p>
-                    </div>
-                    <button id="add-article-btn" class="btn-primary">
-                        <i class="fas fa-plus"></i> إضافة مقال جديد
-                    </button>
-                </header>
-                <section class="filters">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="article-search" placeholder="بحث عن مقال...">
-                    </div>
-                </section>
-                <div class="milestones-grid" id="articles-list">
-                    <!-- Articles will be loaded here -->
-                    <div class="loader">جارِ التحميل...</div>
-                </div>
-            </section>
-        </main>
-    </div>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
-    <!-- Modal for adding/editing milestone -->
-    <div id="milestone-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title">إضافة معلم جديد</h2>
-                <span class="close">&times;</span>
-            </div>
-            <form id="milestone-form">
-                <input type="hidden" id="milestone-id">
-                <div class="form-group">
-                    <label for="title">العنوان</label>
-                    <input type="text" id="title" required placeholder="مثال: يرفع رأسه">
-                </div>
-                <div class="form-group">
-                    <label for="description">الوصف</label>
-                    <textarea id="description" required placeholder="اشرح المعلم بالتفصيل..."></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="monthStart">بداية العمر (بالأشهر)</label>
-                        <input type="number" id="monthStart" min="0" max="36" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="monthEnd">نهاية العمر (بالأشهر)</label>
-                        <input type="number" id="monthEnd" min="0" max="36" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="category">التصنيف</label>
-                    <select id="category" required>
-                        <option value="MOTOR">حركي (MOTOR)</option>
-                        <option value="LANGUAGE">لغوي (LANGUAGE)</option>
-                        <option value="COGNITIVE">معرفي (COGNITIVE)</option>
-                        <option value="SOCIAL">اجتماعي (SOCIAL)</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn-primary" id="save-btn">حفظ</button>
-                </div>
-            </form>
-        </div>
-    </div>
+<script src="app.js"></script>
 
-    <!-- Vaccination Modal -->
-    <div id="vaccination-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="vaccination-modal-title">إضافة لقاح جديد</h2>
-                <span class="close" id="close-vaccination-modal">&times;</span>
-            </div>
-            <form id="vaccination-form">
-                <input type="hidden" id="vaccination-id">
-                <div class="form-group">
-                    <label for="v-title">اسم اللقاح</label>
-                    <input type="text" id="v-title" required placeholder="مثال: لقاح الشلل">
-                </div>
-                <div class="form-group">
-                    <label for="v-description">الوصف / ملاحظات</label>
-                    <textarea id="v-description" placeholder="تفاصيل إضافية عن اللقاح..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="v-dueMonth">موعد اللقاح (بالأشهر)</label>
-                    <input type="number" id="v-dueMonth" required min="0" placeholder="0 = عند الولادة">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn-primary">حفظ اللقاح</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Article Modal -->
-    <div id="article-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="article-modal-title">إضافة مقال جديد</h2>
-                <span class="close" id="close-article-modal">&times;</span>
-            </div>
-            <form id="article-form">
-                <input type="hidden" id="article-id">
-                <div class="form-group">
-                    <label for="article-title">العنوان</label>
-                    <input type="text" id="article-title" required>
-                </div>
-                <div class="form-group">
-                    <label for="article-category">التصنيف</label>
-                    <input type="text" id="article-category" placeholder="تغذية، نوم، صحة..." required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="article-monthStart">بداية العمر (شهر)</label>
-                        <input type="number" id="article-monthStart" min="0" max="36" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="article-monthEnd">نهاية العمر (شهر)</label>
-                        <input type="number" id="article-monthEnd" min="0" max="36" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="article-preview">نبذة قصيرة</label>
-                    <textarea id="article-preview" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="article-content">المحتوى الكامل</label>
-                    <textarea id="article-content" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn-primary">حفظ المقال</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
-    <script src="app.js"></script>
 </body>
-
-
 </html>
-
-
-
