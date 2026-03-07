@@ -12,8 +12,16 @@ const firebaseConfig = {
 // Initialize Firebase (Compat)
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 // DOM Elements
+const loginContainer = document.getElementById('login-container');
+const dashboardContainer = document.getElementById('dashboard-container');
+const loginForm = document.getElementById('login-form');
+const loginError = document.getElementById('login-error');
+const logoutBtn = document.getElementById('logout-btn');
+const userEmailSpan = document.getElementById('user-email');
+
 const milestonesSection = document.getElementById('milestones-section');
 const vaccinationsSection = document.getElementById('vaccinations-section');
 const navMilestones = document.getElementById('nav-milestones');
@@ -47,6 +55,89 @@ const articleSearch = document.getElementById('article-search');
 let allMilestones = [];
 let allVaccinations = [];
 let allArticles = [];
+
+// تحقق من حالة المصادقة
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // المستخدم مسجل الدخول
+        showDashboard(user);
+        loadData();
+    } else {
+        // المستخدم غير مسجل الدخول
+        showLogin();
+    }
+});
+
+// تسجيل الدخول
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // إخفاء أي رسالة خطأ سابقة
+        loginError.style.display = 'none';
+        
+        // تسجيل الدخول
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // تم تسجيل الدخول بنجاح
+                console.log('تم تسجيل الدخول بنجاح');
+            })
+            .catch((error) => {
+                // عرض رسالة الخطأ
+                loginError.textContent = getErrorMessage(error.code);
+                loginError.style.display = 'block';
+            });
+    });
+}
+
+// تسجيل الخروج
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        auth.signOut()
+            .then(() => {
+                console.log('تم تسجيل الخروج');
+            })
+            .catch((error) => {
+                console.error('خطأ في تسجيل الخروج:', error);
+            });
+    });
+}
+
+// دالة لعرض رسائل الخطأ المترجمة
+function getErrorMessage(errorCode) {
+    const messages = {
+        'auth/invalid-email': 'البريد الإلكتروني غير صالح',
+        'auth/user-disabled': 'هذا الحساب معطل',
+        'auth/user-not-found': 'لا يوجد حساب بهذا البريد الإلكتروني',
+        'auth/wrong-password': 'كلمة المرور غير صحيحة',
+        'auth/too-many-requests': 'تم تجاوز عدد محاولات تسجيل الدخول. الرجاء المحاولة لاحقاً'
+    };
+    
+    return messages[errorCode] || 'حدث خطأ في تسجيل الدخول. الرجاء المحاولة مرة أخرى';
+}
+
+// إظهار لوحة التحكم
+function showDashboard(user) {
+    if (loginContainer) loginContainer.style.display = 'none';
+    if (dashboardContainer) dashboardContainer.style.display = 'flex';
+    if (userEmailSpan) userEmailSpan.textContent = user.email;
+}
+
+// إظهار صفحة تسجيل الدخول
+function showLogin() {
+    if (loginContainer) loginContainer.style.display = 'flex';
+    if (dashboardContainer) dashboardContainer.style.display = 'none';
+}
+
+// تحميل جميع البيانات
+function loadData() {
+    loadMilestones();
+    loadVaccinations();
+    loadArticles();
+}
 
 // Navigation Logic
 if (navMilestones) {
@@ -361,7 +452,7 @@ if (addArticleBtn) {
         const idField = document.getElementById('article-id');
         const titleField = document.getElementById('article-modal-title');
         if (idField) idField.value = '';
-        if (titleField) titleField.value = 'إضافة مقال جديد';
+        if (titleField) titleField.innerText = 'إضافة مقال جديد';
         if (articleModal) articleModal.style.display = 'block';
     };
 }
@@ -424,8 +515,3 @@ if (categoryFilter) categoryFilter.onchange = renderMilestones;
 if (ageFilter) ageFilter.onchange = renderMilestones;
 if (vaccinationSearch) vaccinationSearch.oninput = renderVaccinations;
 if (articleSearch) articleSearch.oninput = renderArticles;
-
-// Start app
-loadMilestones();
-loadVaccinations();
-loadArticles();
