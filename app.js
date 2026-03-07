@@ -1,3 +1,13 @@
+
+firebase.auth().onAuthStateChanged(function(user) {
+
+if (!user) {
+
+window.location = "login.html";
+
+}
+
+});
 // Firebase configuration from google-services.json
 const firebaseConfig = {
     apiKey: "AIzaSyDIWizvGK3AxdRELeCRzk7rJ3ONzjT-0Zk",
@@ -429,3 +439,4 @@ if (articleSearch) articleSearch.oninput = renderArticles;
 loadMilestones();
 loadVaccinations();
 loadArticles();
+
