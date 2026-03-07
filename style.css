@@ -395,4 +395,102 @@ label {
     .main-content {
         padding: 20px;
     }
+
+}
+/* Login Page Styles */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 100%);
+    padding: 20px;
+}
+
+.login-box {
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 32px;
+}
+
+.login-box h2 {
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--text-main);
+}
+
+.login-box p {
+    color: var(--text-muted);
+    margin-bottom: 32px;
+}
+
+.btn-login {
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+    font-size: 16px;
+    margin-top: 24px;
+}
+
+.error-message {
+    background-color: #fef2f2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 16px;
+}
+
+/* User info in sidebar */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    background: var(--primary-light);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+}
+
+.user-info i {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.user-info span {
+    font-size: 14px;
+    color: var(--primary-dark);
+    font-weight: 600;
+    word-break: break-all;
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 32px 20px;
+    }
+    
+    .login-logo {
+        font-size: 28px;
+    }
+    
+    .login-box h2 {
+        font-size: 24px;
+    }
 }
