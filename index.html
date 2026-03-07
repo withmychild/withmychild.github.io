@@ -5,25 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة تحكم الأخصائيين - طفلي معي</title>
-     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
-     
-     <link rel="stylesheet" href="style.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="app-container">
+    <!-- صفحة تسجيل الدخول -->
+    <div id="login-container" class="login-container">
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fas fa-child"></i>
+                <span>طفلي معي</span>
+            </div>
+            <h2>تسجيل دخول الأخصائيين</h2>
+            <p>الرجاء إدخال بيانات الدخول للوصول للوحة التحكم</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" required placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" required placeholder="********">
+                </div>
+                <div id="login-error" class="error-message" style="display: none;"></div>
+                <button type="submit" class="btn-primary btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الرئيسية (مخفية حتى تسجيل الدخول) -->
+    <div id="dashboard-container" class="app-container" style="display: none;">
         <aside class="sidebar">
             <div class="logo">
                 <i class="fas fa-child"></i>
                 <span>طفلي معي</span>
             </div>
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="user-email"></span>
+            </div>
             <nav>
                 <a href="#" class="active" id="nav-milestones"><i class="fas fa-step-forward"></i> المعالم النمائية</a>
                 <a href="#" id="nav-vaccinations"><i class="fas fa-syringe"></i> اللقاحات</a>
                 <a href="#" id="nav-articles"><i class="fas fa-book-open"></i> المقالات والنصائح</a>
-                
-                
             </nav>
             <div class="sidebar-footer">
                 <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
@@ -247,8 +277,4 @@
     <script src="app.js"></script>
 </body>
 
-
 </html>
-
-
-
