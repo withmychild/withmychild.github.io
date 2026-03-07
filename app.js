@@ -436,7 +436,21 @@ if (vaccinationSearch) vaccinationSearch.oninput = renderVaccinations;
 if (articleSearch) articleSearch.oninput = renderArticles;
 
 // Start app
+// Start app after login
+firebase.auth().onAuthStateChanged(function(user){
+
+if(user){
+
 loadMilestones();
 loadVaccinations();
 loadArticles();
+
+}else{
+
+window.location="login.html"
+
+}
+
+});
+
 
