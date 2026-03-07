@@ -1,13 +1,3 @@
-
-firebase.auth().onAuthStateChanged(function(user) {
-
-if (!user) {
-
-window.location = "login.html";
-
-}
-
-});
 // Firebase configuration from google-services.json
 const firebaseConfig = {
     apiKey: "AIzaSyDIWizvGK3AxdRELeCRzk7rJ3ONzjT-0Zk",
@@ -436,21 +426,6 @@ if (vaccinationSearch) vaccinationSearch.oninput = renderVaccinations;
 if (articleSearch) articleSearch.oninput = renderArticles;
 
 // Start app
-// Start app after login
-firebase.auth().onAuthStateChanged(function(user){
-
-if(user){
-
 loadMilestones();
 loadVaccinations();
 loadArticles();
-
-}else{
-
-window.location="login.html"
-
-}
-
-});
-
-
