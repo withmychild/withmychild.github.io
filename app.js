@@ -1,13 +1,14 @@
 // Firebase configuration from google-services.json
-const firebaseConfig = {
-    apiKey: "AIzaSyBzY4Ts7e1TwZLlaLEwwaEzVwL5rUezjOM",
+  const firebaseConfig = {
+    apiKey: "AIzaSyCN0nOL5v_5E_w4y6QIZzbdEzTLyOFPouU",
     authDomain: "mychild-8ced5.firebaseapp.com",
     databaseURL: "https://mychild-8ced5-default-rtdb.firebaseio.com",
     projectId: "mychild-8ced5",
     storageBucket: "mychild-8ced5.firebasestorage.app",
     messagingSenderId: "684596289061",
-    appId: "1:684596289061:android:49b6623b7acd92cb8d69cc"
-};
+    appId: "1:684596289061:web:df66269b7a72d58f8d69cc",
+    measurementId: "G-E8PCJHQJ7P"
+  };
 
 // Initialize Firebase (Compat)
 firebase.initializeApp(firebaseConfig);
@@ -515,4 +516,5 @@ if (categoryFilter) categoryFilter.onchange = renderMilestones;
 if (ageFilter) ageFilter.onchange = renderMilestones;
 if (vaccinationSearch) vaccinationSearch.oninput = renderVaccinations;
 if (articleSearch) articleSearch.oninput = renderArticles;
+
 
