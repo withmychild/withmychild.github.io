@@ -65,7 +65,7 @@
             <section id="milestones-section">
                 <header>
                     <div class="header-info">
-                        <h1>إدارة المعالم النمائية</h1>
+                        <h1> المعالم النمائية</h1>
                         <p>أضف وحدث معالم النمو للأطفال من الولادة حتى 3 سنوات</p>
                     </div>
                     <button id="add-milestone-btn" class="btn-primary">
@@ -110,7 +110,7 @@
             <section id="vaccinations-section" style="display: none;">
                 <header>
                     <div class="header-info">
-                        <h1>إدارة التلقيحات</h1>
+                        <h1> التلقيحات</h1>
                         <p>أضف وحدث جدول التلقيحات للأطفال</p>
                     </div>
                     <button id="add-vaccination-btn" class="btn-primary">
@@ -135,7 +135,7 @@
             <section id="articles-section" style="display: none;">
                 <header>
                     <div class="header-info">
-                        <h1>إدارة المقالات والنصائح</h1>
+                        <h1> المقالات والنصائح</h1>
                         <p>أضف مقالات ونصائح مفيدة للأهالي بناءً على عمر الطفل</p>
                     </div>
                     <button id="add-article-btn" class="btn-primary">
@@ -171,7 +171,17 @@
                 </div>
                 <div class="form-group">
                     <label for="description">الوصف</label>
-                    <textarea id="description" required placeholder="اشرح المعلم بالتفصيل..."></textarea>
+                    <textarea id="description" required rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="milestone-image">صورة توضيحية (اختياري)</label>
+                    <input type="file" id="milestone-image" accept="image/*">
+                    <input type="hidden" id="milestone-image-base64">
+                    <img id="milestone-image-preview" src="" style="max-width: 100%; max-height: 200px; display: none; margin-top: 10px; border-radius: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="milestone-video-url">رابط فيديو توضيحي (اختياري)</label>
+                    <input type="url" id="milestone-video-url" placeholder="https://www.youtube.com/...">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -239,6 +249,12 @@
                 <div class="form-group">
                     <label for="article-title">العنوان</label>
                     <input type="text" id="article-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="article-image">صورة المقال (اختياري)</label>
+                    <input type="file" id="article-image" accept="image/*">
+                    <input type="hidden" id="article-image-base64">
+                    <img id="article-image-preview" src="" style="max-width: 100%; max-height: 200px; display: none; margin-top: 10px; border-radius: 8px;">
                 </div>
                 <div class="form-group">
                     <label for="article-category">التصنيف</label>

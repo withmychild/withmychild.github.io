@@ -47,6 +47,14 @@ const addArticleBtn = document.getElementById('add-article-btn');
 const closeArticleBtn = document.getElementById('close-article-modal');
 const articleForm = document.getElementById('article-form');
 
+const milestoneImageInput = document.getElementById('milestone-image');
+const milestoneImageBase64 = document.getElementById('milestone-image-base64');
+const milestoneImagePreview = document.getElementById('milestone-image-preview');
+
+const articleImageInput = document.getElementById('article-image');
+const articleImageBase64 = document.getElementById('article-image-base64');
+const articleImagePreview = document.getElementById('article-image-preview');
+
 const searchInput = document.getElementById('search-input');
 const categoryFilter = document.getElementById('category-filter');
 const ageFilter = document.getElementById('age-filter');
@@ -56,6 +64,42 @@ const articleSearch = document.getElementById('article-search');
 let allMilestones = [];
 let allVaccinations = [];
 let allArticles = [];
+
+// Image Compression Helper
+function compressImage(file, maxWidth, maxHeight, quality, callback) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+            let width = img.width;
+            let height = img.height;
+            
+            if (width > height) {
+                if (width > maxWidth) {
+                    height = Math.round(height * maxWidth / width);
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width = Math.round(width * maxHeight / height);
+                    height = maxHeight;
+                }
+            }
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            callback(dataUrl);
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
 // تحقق من حالة المصادقة
 auth.onAuthStateChanged((user) => {
@@ -231,6 +275,7 @@ function renderArticles() {
         const card = document.createElement('div');
         card.className = 'milestone-card';
         card.innerHTML = `
+            ${art.imageUrl ? `<img src="${art.imageUrl}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">` : ''}
             <span class="category-tag">${art.category}</span>
             <h3>${art.title}</h3>
             <p>${art.preview}</p>
@@ -263,6 +308,20 @@ function editArticle(id) {
     document.getElementById('article-preview').value = art.preview;
     document.getElementById('article-content').value = art.content;
 
+    if (art.imageUrl) {
+        if (articleImageBase64) articleImageBase64.value = art.imageUrl;
+        if (articleImagePreview) {
+            articleImagePreview.src = art.imageUrl;
+            articleImagePreview.style.display = 'block';
+        }
+    } else {
+        if (articleImageBase64) articleImageBase64.value = '';
+        if (articleImagePreview) {
+            articleImagePreview.src = '';
+            articleImagePreview.style.display = 'none';
+        }
+    }
+
     document.getElementById('article-modal-title').innerText = 'تعديل مقال';
     articleModal.style.display = 'block';
 }
@@ -293,6 +352,7 @@ function renderMilestones() {
 
     milestonesList.innerHTML = filtered.map(m => `
         <div class="milestone-card">
+            ${m.imageUrl ? `<img src="${m.imageUrl}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">` : ''}
             <span class="category-tag tag-${(m.category || "").toLowerCase()}">${getCategoryName(m.category)}</span>
             <h3>${m.title}</h3>
             <p>${m.description}</p>
@@ -366,6 +426,23 @@ window.editMilestone = (id) => {
     document.getElementById('monthStart').value = m.monthStart;
     document.getElementById('monthEnd').value = m.monthEnd;
     document.getElementById('category').value = m.category;
+    const videoField = document.getElementById('milestone-video-url');
+    if (videoField) videoField.value = m.videoUrl || '';
+    
+    if (m.imageUrl) {
+        if (milestoneImageBase64) milestoneImageBase64.value = m.imageUrl;
+        if (milestoneImagePreview) {
+            milestoneImagePreview.src = m.imageUrl;
+            milestoneImagePreview.style.display = 'block';
+        }
+    } else {
+        if (milestoneImageBase64) milestoneImageBase64.value = '';
+        if (milestoneImagePreview) {
+            milestoneImagePreview.src = '';
+            milestoneImagePreview.style.display = 'none';
+        }
+    }
+
     document.getElementById('modal-title').innerText = 'تعديل المعلم';
     milestoneModal.style.display = 'block';
 };
@@ -421,6 +498,17 @@ if (addMilestoneBtn) {
         const titleField = document.getElementById('modal-title');
         if (idField) idField.value = '';
         if (titleField) titleField.innerText = 'إضافة معلم جديد';
+        
+        if (milestoneImageInput) milestoneImageInput.value = '';
+        if (milestoneImageBase64) milestoneImageBase64.value = '';
+        if (milestoneImagePreview) {
+            milestoneImagePreview.src = '';
+            milestoneImagePreview.style.display = 'none';
+        }
+        
+        const videoField = document.getElementById('milestone-video-url');
+        if (videoField) videoField.value = '';
+        
         if (milestoneModal) milestoneModal.style.display = 'block';
     };
 }
@@ -454,6 +542,14 @@ if (addArticleBtn) {
         const titleField = document.getElementById('article-modal-title');
         if (idField) idField.value = '';
         if (titleField) titleField.innerText = 'إضافة مقال جديد';
+        
+        if (articleImageInput) articleImageInput.value = '';
+        if (articleImageBase64) articleImageBase64.value = '';
+        if (articleImagePreview) {
+            articleImagePreview.src = '';
+            articleImagePreview.style.display = 'none';
+        }
+        
         if (articleModal) articleModal.style.display = 'block';
     };
 }
@@ -473,7 +569,9 @@ if (milestoneForm) {
             description: document.getElementById('description').value,
             monthStart: parseInt(document.getElementById('monthStart').value),
             monthEnd: parseInt(document.getElementById('monthEnd').value),
-            category: document.getElementById('category').value
+            category: document.getElementById('category').value,
+            imageUrl: typeof milestoneImageBase64 !== 'undefined' && milestoneImageBase64 ? milestoneImageBase64.value || null : null,
+            videoUrl: document.getElementById('milestone-video-url') ? document.getElementById('milestone-video-url').value || null : null
         };
         id ? db.ref(`milestones/${id}`).update(data) : db.ref('milestones').push(data);
         if (milestoneModal) milestoneModal.style.display = 'none';
@@ -504,7 +602,8 @@ if (articleForm) {
             monthStart: parseInt(document.getElementById('article-monthStart').value),
             monthEnd: parseInt(document.getElementById('article-monthEnd').value),
             preview: document.getElementById('article-preview').value,
-            content: document.getElementById('article-content').value
+            content: document.getElementById('article-content').value,
+            imageUrl: typeof articleImageBase64 !== 'undefined' && articleImageBase64 ? articleImageBase64.value || null : null
         };
         id ? db.ref(`articles/${id}`).update(data) : db.ref('articles').push(data);
         if (articleModal) articleModal.style.display = 'none';
@@ -517,4 +616,44 @@ if (ageFilter) ageFilter.onchange = renderMilestones;
 if (vaccinationSearch) vaccinationSearch.oninput = renderVaccinations;
 if (articleSearch) articleSearch.oninput = renderArticles;
 
+if (articleImageInput) {
+    articleImageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            compressImage(file, 800, 800, 0.7, function(base64String) {
+                if (articleImageBase64) articleImageBase64.value = base64String;
+                if (articleImagePreview) {
+                    articleImagePreview.src = base64String;
+                    articleImagePreview.style.display = 'block';
+                }
+            });
+        } else {
+            if (articleImageBase64) articleImageBase64.value = '';
+            if (articleImagePreview) {
+                articleImagePreview.src = '';
+                articleImagePreview.style.display = 'none';
+            }
+        }
+    });
+}
+if (milestoneImageInput) {
+    milestoneImageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            compressImage(file, 800, 800, 0.7, function(base64String) {
+                if (milestoneImageBase64) milestoneImageBase64.value = base64String;
+                if (milestoneImagePreview) {
+                    milestoneImagePreview.src = base64String;
+                    milestoneImagePreview.style.display = 'block';
+                }
+            });
+        } else {
+            if (milestoneImageBase64) milestoneImageBase64.value = '';
+            if (milestoneImagePreview) {
+                milestoneImagePreview.src = '';
+                milestoneImagePreview.style.display = 'none';
+            }
+        }
+    });
+}
 
