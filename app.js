@@ -187,6 +187,7 @@ function showLogin() {
 }
 
 // تحميل جميع البيانات
+function loadData() {
     loadMilestones();
     loadVaccinations();
     loadArticles();
@@ -208,11 +209,17 @@ if (navVaccinations) {
     };
 }
 
-const navArticles = document.getElementById('nav-articles');
 if (navArticles) {
     navArticles.onclick = (e) => {
         e.preventDefault();
         showSection('articles');
+    };
+}
+
+if (navDoctors) {
+    navDoctors.onclick = (e) => {
+        e.preventDefault();
+        showSection('doctors');
     };
 }
 
@@ -683,12 +690,7 @@ if (milestoneImageInput) {
     });
 }
 
-if (navDoctors) {
-    navDoctors.onclick = (e) => {
-        e.preventDefault();
-        showSection('doctors');
-    };
-}
+
 
 if (addDoctorBtn) {
     addDoctorBtn.onclick = () => {
