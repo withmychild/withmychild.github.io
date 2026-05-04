@@ -46,6 +46,7 @@ const articleModal = document.getElementById('article-modal');
 const addArticleBtn = document.getElementById('add-article-btn');
 const closeArticleBtn = document.getElementById('close-article-modal');
 const articleForm = document.getElementById('article-form');
+const navArticles = document.getElementById('nav-articles');
 const navDoctors = document.getElementById('nav-doctors');
 const doctorsSection = document.getElementById('doctors-section');
 const doctorsList = document.getElementById('doctors-list');
