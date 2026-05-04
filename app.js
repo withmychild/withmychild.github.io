@@ -46,6 +46,14 @@ const articleModal = document.getElementById('article-modal');
 const addArticleBtn = document.getElementById('add-article-btn');
 const closeArticleBtn = document.getElementById('close-article-modal');
 const articleForm = document.getElementById('article-form');
+const navDoctors = document.getElementById('nav-doctors');
+const doctorsSection = document.getElementById('doctors-section');
+const doctorsList = document.getElementById('doctors-list');
+const doctorModal = document.getElementById('doctor-modal');
+const addDoctorBtn = document.getElementById('add-doctor-btn');
+const closeDoctorBtn = document.getElementById('close-doctor-modal');
+const doctorForm = document.getElementById('doctor-form');
+const doctorSearch = document.getElementById('doctor-search');
 
 const milestoneImageInput = document.getElementById('milestone-image');
 const milestoneImageBase64 = document.getElementById('milestone-image-base64');
@@ -64,6 +72,7 @@ const articleSearch = document.getElementById('article-search');
 let allMilestones = [];
 let allVaccinations = [];
 let allArticles = [];
+let allDoctors = [];
 
 // Image Compression Helper
 function compressImage(file, maxWidth, maxHeight, quality, callback) {
@@ -178,10 +187,10 @@ function showLogin() {
 }
 
 // تحميل جميع البيانات
-function loadData() {
     loadMilestones();
     loadVaccinations();
     loadArticles();
+    loadDoctors();
 }
 
 // Navigation Logic
@@ -211,10 +220,12 @@ function showSection(section) {
     if (milestonesSection) milestonesSection.style.display = section === 'milestones' ? 'block' : 'none';
     if (vaccinationsSection) vaccinationsSection.style.display = section === 'vaccinations' ? 'block' : 'none';
     if (articlesSection) articlesSection.style.display = section === 'articles' ? 'block' : 'none';
+    if (doctorsSection) doctorsSection.style.display = section === 'doctors' ? 'block' : 'none';
 
     if (navMilestones) navMilestones.classList.toggle('active', section === 'milestones');
     if (navVaccinations) navVaccinations.classList.toggle('active', section === 'vaccinations');
     if (navArticles) navArticles.classList.toggle('active', section === 'articles');
+    if (navDoctors) navDoctors.classList.toggle('active', section === 'doctors');
 }
 
 // Load Milestones
@@ -251,6 +262,20 @@ function loadArticles() {
             });
         });
         renderArticles();
+    });
+}
+
+// Load Doctors
+function loadDoctors() {
+    db.ref('pediatricians').on('value', (snapshot) => {
+        allDoctors = [];
+        snapshot.forEach((childSnapshot) => {
+            allDoctors.push({
+                id: childSnapshot.key,
+                ...childSnapshot.val()
+            });
+        });
+        renderDoctors();
     });
 }
 
@@ -531,6 +556,7 @@ window.onclick = (event) => {
     if (milestoneModal && event.target == milestoneModal) milestoneModal.style.display = 'none';
     if (vaccinationModal && event.target == vaccinationModal) vaccinationModal.style.display = 'none';
     if (articleModal && event.target == articleModal) articleModal.style.display = 'none';
+    if (doctorModal && event.target == doctorModal) doctorModal.style.display = 'none';
 };
 
 if (articleSearch) articleSearch.oninput = renderArticles;
@@ -656,4 +682,100 @@ if (milestoneImageInput) {
         }
     });
 }
+
+if (navDoctors) {
+    navDoctors.onclick = (e) => {
+        e.preventDefault();
+        showSection('doctors');
+    };
+}
+
+if (addDoctorBtn) {
+    addDoctorBtn.onclick = () => {
+        if (doctorForm) doctorForm.reset();
+        document.getElementById('doctor-id').value = '';
+        document.getElementById('doctor-modal-title').innerText = 'إضافة طبيب جديد';
+        doctorModal.style.display = 'block';
+    };
+}
+
+if (closeDoctorBtn) closeDoctorBtn.onclick = () => { doctorModal.style.display = 'none'; };
+
+if (doctorForm) {
+    doctorForm.onsubmit = (e) => {
+        e.preventDefault();
+        const id = document.getElementById('doctor-id').value;
+        const data = {
+            name: document.getElementById('d-name').value,
+            address: document.getElementById('d-address').value,
+            latitude: parseFloat(document.getElementById('d-lat').value),
+            longitude: parseFloat(document.getElementById('d-lon').value),
+            rating: parseFloat(document.getElementById('d-rating').value),
+            phoneNumber: document.getElementById('d-phone').value,
+            specialty: "Pediatrician"
+        };
+        id ? db.ref(`pediatricians/${id}`).update(data) : db.ref('pediatricians').push(data);
+        doctorModal.style.display = 'none';
+    };
+}
+
+if (doctorSearch) doctorSearch.oninput = renderDoctors;
+
+function renderDoctors() {
+    const searchTerm = (doctorSearch.value || "").toLowerCase();
+    const filtered = allDoctors.filter(d => 
+        (d.name || "").toLowerCase().includes(searchTerm) || 
+        (d.address || "").toLowerCase().includes(searchTerm)
+    );
+
+    doctorsList.innerHTML = '';
+
+    if (filtered.length === 0) {
+        doctorsList.innerHTML = '<div class="loader">لا توجد نتائج مطابقة</div>';
+        return;
+    }
+
+    filtered.forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'milestone-card';
+        card.innerHTML = `
+            <span class="category-tag tag-motor">طبيب أطفال</span>
+            <h3>${d.name}</h3>
+            <p>${d.address}</p>
+            <div class="age-range">
+                <i class="fas fa-star" style="color: #ffc107;"></i>
+                <span>التقييم: ${d.rating} | الهاتف: ${d.phoneNumber}</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-icon btn-edit" onclick="editDoctor('${d.id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete" onclick="deleteDoctor('${d.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        doctorsList.appendChild(card);
+    });
+}
+
+window.editDoctor = (id) => {
+    const d = allDoctors.find(item => item.id === id);
+    if (!d) return;
+    document.getElementById('doctor-id').value = d.id;
+    document.getElementById('d-name').value = d.name;
+    document.getElementById('d-address').value = d.address;
+    document.getElementById('d-lat').value = d.latitude;
+    document.getElementById('d-lon').value = d.longitude;
+    document.getElementById('d-rating').value = d.rating;
+    document.getElementById('d-phone').value = d.phoneNumber;
+    document.getElementById('doctor-modal-title').innerText = 'تعديل بيانات الطبيب';
+    doctorModal.style.display = 'block';
+};
+
+window.deleteDoctor = (id) => {
+    if (confirm('هل أنت متأكد من حذف هذا الطبيب؟')) {
+        db.ref(`pediatricians/${id}`).remove();
+    }
+};
 
