@@ -162,9 +162,15 @@
                         <h1> أطباء الأطفال</h1>
                         <p>أضف وحدث معلومات أطباء الأطفال في المنطقة</p>
                     </div>
-                    <button id="add-doctor-btn" class="btn-primary">
-                        <i class="fas fa-plus"></i> إضافة طبيب جديد
-                    </button>
+                    <div class="header-actions" style="display: flex; gap: 12px;">
+                        <button id="import-doctors-btn" class="btn-secondary">
+                            <i class="fas fa-file-csv"></i> استيراد من ملف CSV
+                        </button>
+                        <button id="add-doctor-btn" class="btn-primary">
+                            <i class="fas fa-plus"></i> إضافة طبيب جديد
+                        </button>
+                    </div>
+                    <input type="file" id="doctor-csv-input" accept=".csv" style="display: none;">
                 </header>
                 <section class="filters">
                     <div class="search-box">

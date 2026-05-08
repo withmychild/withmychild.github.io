@@ -151,6 +151,24 @@ header {
     background: var(--primary-dark);
 }
 
+.btn-secondary {
+    background: var(--white);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: .25s;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-light);
+}
+
 /* Filters */
 .filters {
     display: flex;

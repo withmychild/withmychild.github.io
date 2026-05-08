@@ -55,6 +55,8 @@ const addDoctorBtn = document.getElementById('add-doctor-btn');
 const closeDoctorBtn = document.getElementById('close-doctor-modal');
 const doctorForm = document.getElementById('doctor-form');
 const doctorSearch = document.getElementById('doctor-search');
+const importDoctorsBtn = document.getElementById('import-doctors-btn');
+const doctorCsvInput = document.getElementById('doctor-csv-input');
 
 const milestoneImageInput = document.getElementById('milestone-image');
 const milestoneImageBase64 = document.getElementById('milestone-image-base64');
@@ -720,6 +722,87 @@ if (doctorForm) {
         id ? db.ref(`pediatricians/${id}`).update(data) : db.ref('pediatricians').push(data);
         doctorModal.style.display = 'none';
     };
+}
+
+// Bulk Upload Logic
+if (importDoctorsBtn) {
+    importDoctorsBtn.onclick = () => {
+        doctorCsvInput.click();
+    };
+}
+
+if (doctorCsvInput) {
+    doctorCsvInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const csvData = event.target.result;
+            handleCSVUpload(csvData);
+        };
+        reader.readAsText(file);
+        
+        // Reset input so the same file can be uploaded again if needed
+        doctorCsvInput.value = '';
+    };
+}
+
+function handleCSVUpload(csvText) {
+    const lines = csvText.split('\n');
+    if (lines.length < 2) {
+        alert('الملف فارغ أو غير صالح');
+        return;
+    }
+
+    // Assume header: name, address, latitude, longitude, rating, phoneNumber
+    const doctors = [];
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+    
+    for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        
+        const values = lines[i].split(',').map(v => v.trim());
+        const doctor = {
+            specialty: "Pediatrician"
+        };
+        
+        // Map values based on index or assumed order
+        // Order: name, address, latitude, longitude, rating, phoneNumber
+        if (values.length >= 6) {
+            doctor.name = values[0];
+            doctor.address = values[1];
+            doctor.latitude = parseFloat(values[2]);
+            doctor.longitude = parseFloat(values[3]);
+            doctor.rating = parseFloat(values[4]) || 5.0;
+            doctor.phoneNumber = values[5];
+            
+            if (doctor.name && !isNaN(doctor.latitude) && !isNaN(doctor.longitude)) {
+                doctors.push(doctor);
+            }
+        }
+    }
+
+    if (doctors.length === 0) {
+        alert('لم يتم العثور على بيانات صحيحة في الملف. تأكد من أن الترتيب هو: الاسم، العنوان، خط العرض، خط الطول، التقييم، رقم الهاتف');
+        return;
+    }
+
+    if (confirm(`هل أنت متأكد من إضافة ${doctors.length} طبيب؟`)) {
+        const doctorsRef = db.ref('pediatricians');
+        let count = 0;
+        
+        doctors.forEach(doc => {
+            doctorsRef.push(doc).then(() => {
+                count++;
+                if (count === doctors.length) {
+                    alert(`تمت إضافة ${count} طبيب بنجاح!`);
+                }
+            }).catch(err => {
+                console.error('Error adding doctor:', err);
+            });
+        });
+    }
 }
 
 if (doctorSearch) doctorSearch.oninput = renderDoctors;
